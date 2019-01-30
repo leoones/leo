@@ -1,8 +1,6 @@
--- 清空临时表
-truncate  table dw_hr.fct_rt_dc_shop_sku_vender_mon_tmp;
+truncate  table dw_hr.fct_rt_dc_shop_sku_vender_mon_tmp$$
 
 
--- 插入临时表
 insert into dw_hr.fct_rt_dc_shop_sku_vender_mon_tmp(
  stat_year                ,
   stat_month               ,
@@ -124,13 +122,11 @@ group by
   categoryid               ,
   buntype                  ,
   dctype                   ,
-  shopformid;
+  shopformid$$
   
   
 
-
--- 插入正式表
-alter table dw_hr.fct_rt_dc_shop_sku_vender_mon drop partition(201803);
+alter table dw_hr.fct_rt_dc_shop_sku_vender_mon drop partition(201803)$$
 
 insert into dw_hr.fct_rt_dc_shop_sku_vender_mon(
  stat_year                ,
@@ -251,6 +247,6 @@ all inner join (
       from dw_hr.fct_rt_dc_shop_sku_vender_mon_tmp
       group by out_shop_id
       ) t2
-using (out_shop_id);
+using (out_shop_id)$$
 
 
