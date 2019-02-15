@@ -374,27 +374,6 @@ CREATE TABLE ods_hr.receipt_store_l (
     
     
 
-
----------------------------------------- 全国 配送 日 信息 ----------------------------------    
-CREATE TABLE ods_hr.receipt_store_l (
-  check_date        Date,
-  sheetid           String,
-  bu                String,
-  shop_id           String,
-  logistics         Decimal (18, 4),
-  check_box_num     Decimal (18, 4),
-  check_scatter_num Decimal (18, 4),
-  cost              Decimal (18, 4),
-  categoryid        UInt32,
-  goodsid           UInt32,
-  venderid          String,
-  refsheetid        String,
-  shopformid        UInt8,
-  provinces_regions String
-)
-  ENGINE = MergeTree
-    PARTITION BY toYYYYMM(check_date) ORDER BY shop_id
-    SETTINGS index_granularity = 8192;
   
 ---------------------------------------- 香港 验收 日 信息 ----------------------------------
 CREATE TABLE ods_hr.xg_check_t (
