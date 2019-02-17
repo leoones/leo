@@ -18,30 +18,30 @@ chown -R clickhouse:clickhouse $1
 }
 
 ckinstall() {
- path="/opt/"
- file="clickhouse-server-base_$1_amd64.deb"
- if [ -f "$path$file" ]; then
-  dpkg -i $path$file
- else
-   echo "$path$file not exist.You must upload"
-   exit 99
- fi 
+     path="/opt/"
+     file="clickhouse-server-base_$1_amd64.deb"
+		 if [ -f "$path$file" ]; then
+		  dpkg -i $path$file
+		 else
+      echo "$path$file not exist.You must upload"
+      exit 99
+     fi 
 
- file="clickhouse-server-common_$1_all.deb"
- if [ -f "$path$file" ]; then
-  dpkg -i $path$file
- else
-   echo "$path$file not exist.You must upload"
-   exit 99
- fi
-
-file="clickhouse-client_$1_all.deb"
- if [ -f "$path$file" ]; then
-  dpkg -i $path$file
- else
-   echo "  $path$file not exist.You must upload"
-   exit 99
- fi 
+		 file="clickhouse-server-common_$1_all.deb"
+		 if [ -f "$path$file" ]; then
+		  dpkg -i $path$file
+		 else
+		   echo "$path$file not exist.You must upload"
+		   exit 99
+		 fi
+		
+		file="clickhouse-client_$1_all.deb"
+		 if [ -f "$path$file" ]; then
+		  dpkg -i $path$file
+		 else
+		   echo "  $path$file not exist.You must upload"
+		   exit 99
+		 fi 
 }
 
 sed_ckserver() {
