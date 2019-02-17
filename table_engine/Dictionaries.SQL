@@ -83,9 +83,11 @@
 		    
 		</dictionary>
 		
-		
-		
-样例：
+ 案例参考：dw_buinfo_dictionary.xml, dw_category_info_dictionary.xml,
+         dw_shop_dictionary.xml,   dw_shop_dictionary.xml 
+         	
+         	
+查询样例：
   
 	select dictGetString('dw_buinfo', 'buname', tuple(frdssvd.out_buid)) as buname
 	 from dw_hr.fct_rt_dc_shop_sku_vender_day frdssvd limit  100;
