@@ -43,7 +43,7 @@ create table dw_hr.dw_good_info
 (
 	buid String,
 	categoryid String,
-	categorytreeid UInt32,
+	categorytreeid UInt8,
 	sysgoodsid UInt8,
 	goodsid UInt32,
 	goodscode UInt32,
