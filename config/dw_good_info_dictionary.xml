@@ -33,7 +33,7 @@
    
    <attribute>
      <name>categoryid</name>
-     <type>UInt32</type>
+     <type>String</type>
      <null_value>0</null_value>
    </attribute>
    
@@ -45,7 +45,7 @@
    
    <attribute>
      <name>mid_categoryid</name>
-     <type>UInt32</type>
+     <type>String</type>
      <null_value>0</null_value>
    </attribute>
    
@@ -57,7 +57,7 @@
    
    <attribute>
     <name>h_categoryid</name>
-    <type>UInt32</type>
+    <type>String</type>
     <null_value>0</null_value>
    </attribute>
    
