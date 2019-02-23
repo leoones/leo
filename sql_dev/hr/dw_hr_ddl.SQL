@@ -7,8 +7,7 @@ CREATE TABLE dw_hr.dw_vender_info (
   parent_buid       String,
   parent_venderid   String,
   parent_vendername String
-)
-  ENGINE = Log;
+) ENGINE = Log;
   
 CREATE VIEW dw_hr.vw_dw_buinfo (buid String, buname String, mapping_buid String, mapping_buname String, categorytreeid UInt32) AS
   SELECT jb.buid,
@@ -21,43 +20,51 @@ CREATE VIEW dw_hr.vw_dw_buinfo (buid String, buname String, mapping_buid String,
 
   
 --------------------------------------- 维度表 - 商品品类 ---------------------------------------
+drop table if exists dw_hr.dw_category_info;
+
+
 CREATE TABLE dw_hr.dw_category_info (
   categorytreeid   UInt8,
   deptlevelid      UInt32,
-  categoryid       UInt32,
+  categoryid       String,
   categoryname     String,
-  mid_categoryid   UInt32,
+  mid_categoryid   String,
   mid_categoryname String,
-  h_categoryid     UInt32,
+  h_categoryid     String,
   h_categoryname   String
 )
   ENGINE = Log;
   
   
 --------------------------------------- 维度表 - 商品 ---------------------------------------
-CREATE TABLE dw_hr.dw_good_info (
-  buid             String,
-  categoryid       UInt32,
-  categorytreeid   UInt32,
-  sysgoodsid       UInt8,
-  goodsid          UInt32,
-  goodscode        UInt32,
-  goodsname        String,
-  barcode          String,
-  unitname         String,
-  inbuid           String,
-  producingarea    String,
-  adviceprice      String,
-  advicecost       String,
-  addrate          String,
-  brandid          UInt32,
-  categoryname     String,
-  mid_categoryid   UInt32,
-  mid_categoryname String,
-  h_categoryid     UInt32,
-  h_categoryname   String
+drop table dw_hr.dw_good_info;
+
+create table dw_hr.dw_good_info
+(
+	buid String,
+	categoryid String,
+	categorytreeid UInt32,
+	sysgoodsid UInt8,
+	goodsid UInt32,
+	goodscode UInt32,
+	goodsname String,
+	barcode String,
+	unitname String,
+	inbuid String,
+	producingarea String,
+	adviceprice String,
+	advicecost String,
+	addrate String,
+	brandid UInt32,
+	categoryname String,
+	mid_categoryid String,
+	mid_categoryname String,
+	h_categoryid String,
+	h_categoryname String
 )
-  ENGINE = Log;
+engine = Log;
+
+
   
   
 --------------------------------------- 维度表 - 店铺信息 ---------------------------------------
@@ -225,64 +232,96 @@ from dw_hr.fct_rsl_dc_shop_vender_day
 
 
 --------------------------------------- 事实表 - 配送日清单表 ---------------------------------------
-CREATE TABLE dw_hr.fct_rt_dc_shop_sku_vender_day (
-  stat_year                  UInt16,
-  stat_month                 UInt32,
-  stat_day                   Date,
-  out_buid                   String,
-  out_shop_id                String,
-  in_shop_id                 String,
-  datasource                 UInt8,
-  venderid                   String,
-  categorytreeid             UInt8,
-  categoryid                 UInt32,
-  buntype                    UInt8,
-  dctype                     UInt8,
-  shopformid                 UInt8,
-  rt_qty                     Decimal (18, 4),
-  rt_cost                    Decimal (18, 4),
-  rt_taxcost                 Decimal (18, 4),
-  rt_shops                   String,
-  rt_drygood_qty             Decimal (18, 4),
-  rt_drygood_cost            Decimal (18, 4),
-  rt_drygood_boxes           Decimal (18, 4),
-  rt_drygood_shops           String,
-  rt_fresh_qty               Decimal (18, 4),
-  rt_fresh_cost              Decimal (18, 4),
-  rt_fresh_shops             String,
-  rt_supshop_cost            Decimal (18, 4),
-  rt_supshop_qty             Decimal (18, 4),
-  rt_supshop_shops           String,
-  rt_smallshop_cost          Decimal (18, 4),
-  rt_smallshop_qty           Decimal (18, 4),
-  rt_smallshop_shops         String,
-  rt_dc_cost                 Decimal (18, 4),
-  rt_dc_qty                  Decimal (18, 4),
-  rt_drygood_supshop_cost    Decimal (18, 4),
-  rt_drygood_supshop_qty     Decimal (18, 4),
-  rt_drygood_supshop_boxes   Decimal (18, 4),
-  rt_drygood_supshop_shops   String,
-  rt_drygood_smallshop_cost  Decimal (18, 4),
-  rt_drygood_smallshop_qty   Decimal (18, 4),
-  rt_drygood_smallshop_boxes Decimal (18, 4),
-  rt_drygood_smallshop_shops String,
-  rt_drygood_dc_cost         Decimal (18, 4),
-  rt_drygood_dc_qty          Decimal (18, 4),
-  rt_drygood_dc_boxes        Decimal (18, 4),
-  rt_drygood_dc_shops        String,
-  rt_fresh_supshop_cost      Decimal (18, 4),
-  rt_fresh_supshop_qty       Decimal (18, 4),
-  rt_fresh_supshop_shops     String,
-  rt_fresh_smallshop_cost    Decimal (18, 4),
-  rt_fresh_smallshop_qty     Decimal (18, 4),
-  rt_fresh_smallshop_shops   String,
-  rt_fresh_dc_cost           Decimal (18, 4),
-  rt_fresh_dc_qty            Decimal (18, 4)
+
+drop table if exists  dw_hr.fct_rt_dc_shop_sku_vender_day_ti;
+
+create table dw_hr.fct_rt_dc_shop_sku_vender_day_ti
+(stat_year UInt16,
+stat_month UInt32,
+stat_day Date,
+out_buid String,
+out_shop_id String,
+dctype UInt8,
+in_shop_id String,
+shopformid UInt8,
+goodsid UInt32,
+category_id String,
+venderid String,
+logistics UInt8,
+buntype UInt8,
+datasource UInt8,
+rt_boxes Decimal (18, 4),
+rt_qty Decimal (18, 4),
+rt_cost Decimal (18, 4),
+rt_taxcost Decimal (18, 4)
+) engine=Log;
+
+
+drop  table if exists  dw_hr.fct_rt_dc_shop_sku_vender_day;
+
+create table dw_hr.fct_rt_dc_shop_sku_vender_day
+(
+	stat_year UInt16,
+	stat_month UInt32,
+	stat_day Date,
+	out_buid String,
+	out_shop_id String,
+	in_shop_id String,
+	datasource UInt8,
+	venderid String,
+	categorytreeid UInt8,
+	categoryid String,
+	logistics UInt8,
+	buntype UInt8,
+	dctype UInt8,
+	shopformid UInt8,
+	rt_qty Decimal(18,4),
+	rt_cost Decimal(18,4),
+	rt_taxcost Decimal(18,4),
+	rt_shops String,
+	rt_drygood_qty Decimal(18,4),
+	rt_drygood_cost Decimal(18,4),
+	rt_drygood_boxes Decimal(18,4),
+	rt_drygood_shops String,
+	rt_fresh_qty Decimal(18,4),
+	rt_fresh_cost Decimal(18,4),
+	rt_fresh_shops String,
+	rt_supshop_cost Decimal(18,4),
+	rt_supshop_qty Decimal(18,4),
+	rt_supshop_shops String,
+	rt_smallshop_cost Decimal(18,4),
+	rt_smallshop_qty Decimal(18,4),
+	rt_smallshop_shops String,
+	rt_dc_cost Decimal(18,4),
+	rt_dc_qty Decimal(18,4),
+	rt_drygood_supshop_cost Decimal(18,4),
+	rt_drygood_supshop_qty Decimal(18,4),
+	rt_drygood_supshop_boxes Decimal(18,4),
+	rt_drygood_supshop_shops String,
+	rt_drygood_smallshop_cost Decimal(18,4),
+	rt_drygood_smallshop_qty Decimal(18,4),
+	rt_drygood_smallshop_boxes Decimal(18,4),
+	rt_drygood_smallshop_shops String,
+	rt_drygood_dc_cost Decimal(18,4),
+	rt_drygood_dc_qty Decimal(18,4),
+	rt_drygood_dc_boxes Decimal(18,4),
+	rt_drygood_dc_shops String,
+	rt_fresh_supshop_cost Decimal(18,4),
+	rt_fresh_supshop_qty Decimal(18,4),
+	rt_fresh_supshop_shops String,
+	rt_fresh_smallshop_cost Decimal(18,4),
+	rt_fresh_smallshop_qty Decimal(18,4),
+	rt_fresh_smallshop_shops String,
+	rt_fresh_dc_cost Decimal(18,4),
+	rt_fresh_dc_qty Decimal(18,4)
 )
-  ENGINE = MergeTree
-    PARTITION BY toYYYYMM(stat_day) ORDER BY (stat_day, out_shop_id)
-    SETTINGS index_granularity = 8192;
+engine = MergeTree PARTITION BY toYYYYMM(stat_day) ORDER BY (stat_day, out_shop_id) SETTINGS index_granularity = 8192
+;
+
     
+drop table dw_hr.vw_fct_rt_dc_shop_sku_vender_day;
+
+
 CREATE VIEW dw_hr.vw_fct_rt_dc_shop_sku_vender_day (stat_year UInt16, stat_month UInt32, stat_day Date, out_buid String, out_buname String, out_shop_id String, out_shopname String, out_provinces_regions String, rt_dctype String, rt_buntype String, in_shop_id String, in_shopname String, in_provinces_regions String, shopformid_type String, rt_datasource String, categoryname String, mid_categoryid UInt32, mid_categoryname String, h_categoryid UInt32, h_categoryname String, p_venderid String, p_vendernm String, rt_qty Decimal (18, 4), rt_cost Decimal (18, 4), rt_taxcost Decimal (18, 4), rt_shops String, rt_drygood_qty Decimal (18, 4), rt_drygood_cost Decimal (18, 4), rt_drygood_boxes Decimal (18, 4), rt_drygood_shops String, rt_fresh_qty Decimal (18, 4), rt_fresh_cost Decimal (18, 4), rt_fresh_shops String, rt_supshop_cost Decimal (18, 4), rt_supshop_qty Decimal (18, 4), rt_supshop_shops String, rt_smallshop_cost Decimal (18, 4), rt_smallshop_qty Decimal (18, 4), rt_smallshop_shops String, rt_dc_cost Decimal (18, 4), rt_dc_qty Decimal (18, 4), rt_drygood_supshop_cost Decimal (18, 4), rt_drygood_supshop_qty Decimal (18, 4), rt_drygood_supshop_boxes Decimal (18, 4), rt_drygood_supshop_shops String, rt_drygood_smallshop_cost Decimal (18, 4), rt_drygood_smallshop_qty Decimal (18, 4), rt_drygood_smallshop_boxes Decimal (18, 4), rt_drygood_smallshop_shops String, rt_drygood_dc_cost Decimal (18, 4), rt_drygood_dc_qty Decimal (18, 4), rt_drygood_dc_boxes Decimal (18, 4), rt_drygood_dc_shops String, rt_fresh_supshop_cost Decimal (18, 4), rt_fresh_supshop_qty Decimal (18, 4), rt_fresh_supshop_shops String, rt_fresh_smallshop_cost Decimal (18, 4), rt_fresh_smallshop_qty Decimal (18, 4), rt_fresh_smallshop_shops String, rt_fresh_dc_cost Decimal (18, 4), rt_fresh_dc_qty Decimal (18, 4)) AS
   SELECT frt.stat_year,
          frt.stat_month,
@@ -303,10 +342,10 @@ CREATE VIEW dw_hr.vw_fct_rt_dc_shop_sku_vender_day (stat_year UInt16, stat_month
          multiIf(frt.datasource = 1, '全国', frt.datasource = 2, '香港', frt.datasource = 3, '苏果', frt.datasource = 4,
                  'OLE', '未知')                                                                        AS rt_datasource,
          dictGetString('dw_category_info', 'categoryname', (frt.categorytreeid, frt.categoryid))     AS categoryname,
-         dictGetUInt32('dw_category_info', 'mid_categoryid', (frt.categorytreeid, frt.categoryid))   AS mid_categoryid,
+         dictGetString('dw_category_info', 'mid_categoryid', (frt.categorytreeid, frt.categoryid))   AS mid_categoryid,
          dictGetString('dw_category_info', 'mid_categoryname', (frt.categorytreeid,
                                                                 frt.categoryid))                     AS mid_categoryname,
-         dictGetUInt32('dw_category_info', 'h_categoryid', (frt.categorytreeid, frt.categoryid))     AS h_categoryid,
+         dictGetString('dw_category_info', 'h_categoryid', (frt.categorytreeid, frt.categoryid))     AS h_categoryid,
          dictGetString('dw_category_info', 'h_categoryname', (frt.categorytreeid, frt.categoryid))   AS h_categoryname,
          dictGetString('dw_vender_info', 'parent_venderid', (out_buid, frt.venderid))                AS p_venderid,
          dictGetString('dw_vender_info', 'parent_vendername', (out_buid, frt.venderid))              AS p_vendernm,
