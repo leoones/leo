@@ -344,7 +344,7 @@ CREATE TABLE ods_hr.ration_l (
   deliver_date Date,
   out_shop_id  String,
   in_shop_id   String,
-  goodsid      LowCardinality(UInt32),
+  goodsid      UInt32,
   packing_qty  Decimal (18, 4),
   qty          Decimal (18, 4),
   cost         Decimal (18, 4),
