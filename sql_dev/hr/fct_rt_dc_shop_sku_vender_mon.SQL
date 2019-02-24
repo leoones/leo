@@ -1,7 +1,7 @@
-truncate  table dw_hr.fct_rt_dc_shop_sku_vender_mon_tmp$$
+truncate  table dw_hr.fct_rt_dc_shop_sku_vender_mon_ti;
 
 
-insert into dw_hr.fct_rt_dc_shop_sku_vender_mon_tmp(
+insert into dw_hr.fct_rt_dc_shop_sku_vender_mon_ti(
  stat_year                ,
   stat_month               ,
   out_buid                 ,
@@ -11,6 +11,7 @@ insert into dw_hr.fct_rt_dc_shop_sku_vender_mon_tmp(
   venderid                 ,
   categorytreeid           ,
   categoryid               ,
+  logistics                ,
   buntype                  ,
   dctype                   ,
   shopformid               ,
@@ -65,6 +66,7 @@ select
   venderid                 ,
   categorytreeid           ,
   categoryid               ,
+  logistics                ,
   buntype                  ,
   dctype                   ,
   shopformid               ,
@@ -108,8 +110,8 @@ select
   sum(rt_fresh_dc_cost)         ,
   sum(rt_fresh_dc_qty)
 from dw_hr.fct_rt_dc_shop_sku_vender_day
-where stat_day >= toDate('2018-03-01')
-  and stat_day < addMonths(toDate('2018-03-01'), 1)
+where stat_day >= toDate('$stat_mon_first')
+  and stat_day < addMonths(toDate('$stat_mon_first'), 1)
 group by
   stat_year                ,
   stat_month               ,
@@ -120,13 +122,14 @@ group by
   venderid                 ,
   categorytreeid           ,
   categoryid               ,
+  logistics                ,
   buntype                  ,
   dctype                   ,
-  shopformid$$
+  shopformid;
   
   
 
-alter table dw_hr.fct_rt_dc_shop_sku_vender_mon drop partition(201803)$$
+alter table dw_hr.fct_rt_dc_shop_sku_vender_mon drop partition($stat_mon);
 
 insert into dw_hr.fct_rt_dc_shop_sku_vender_mon(
  stat_year                ,
@@ -138,6 +141,7 @@ insert into dw_hr.fct_rt_dc_shop_sku_vender_mon(
   venderid                 ,
   categorytreeid           ,
   categoryid               ,
+  logistics                ,
   buntype                  ,
   dctype                   ,
   shopformid               ,
@@ -193,6 +197,7 @@ insert into dw_hr.fct_rt_dc_shop_sku_vender_mon(
       venderid                 ,
       categorytreeid           ,
       categoryid               ,
+      logistics                ,
       buntype                  ,
       dctype                   ,
       shopformid               ,
@@ -238,15 +243,13 @@ insert into dw_hr.fct_rt_dc_shop_sku_vender_mon(
       rt_outshop_cost,
       rt_outshop_qty,
       rt_outshop_boxes
-  from dw_hr.fct_rt_dc_shop_sku_vender_mon_tmp t1
+  from dw_hr.fct_rt_dc_shop_sku_vender_mon_ti t1
 all inner join (
     select out_shop_id,
            sum(rt_cost) as rt_outshop_cost,
            sum(rt_qty) as rt_outshop_qty,
            sum(rt_drygood_boxes) as rt_outshop_boxes
-      from dw_hr.fct_rt_dc_shop_sku_vender_mon_tmp
+      from dw_hr.fct_rt_dc_shop_sku_vender_mon_ti
       group by out_shop_id
       ) t2
-using (out_shop_id)$$
-
-
+using (out_shop_id);
