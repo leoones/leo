@@ -230,6 +230,132 @@ select
 from dw_hr.fct_rsl_dc_shop_vender_day
 
 
+--------------------------------------- 事实表 - 日配送清单  ---------------------------------------
+
+drop  table if exists  dw_hr.fct_rt_dc_shop_day;
+
+create table dw_hr.fct_rt_dc_shop_day
+(
+	stat_year UInt16,
+	stat_month UInt32,
+	stat_day Date,
+	out_buid String,
+	out_shop_id String,
+	in_shop_id String,
+	datasource UInt8,
+	logistics UInt8,
+	buntype UInt8,
+	dctype UInt8,
+	shopformid UInt8,
+	rt_qty Decimal(18,4),
+	rt_cost Decimal(18,4),
+	rt_taxcost Decimal(18,4),
+	rt_shops String,
+	rt_drygood_qty Decimal(18,4),
+	rt_drygood_cost Decimal(18,4),
+	rt_drygood_boxes Decimal(18,4),
+	rt_drygood_shops String,
+	rt_fresh_qty Decimal(18,4),
+	rt_fresh_cost Decimal(18,4),
+	rt_fresh_shops String,
+	rt_supshop_cost Decimal(18,4),
+	rt_supshop_qty Decimal(18,4),
+	rt_supshop_shops String,
+	rt_smallshop_cost Decimal(18,4),
+	rt_smallshop_qty Decimal(18,4),
+	rt_smallshop_shops String,
+	rt_dc_cost Decimal(18,4),
+	rt_dc_qty Decimal(18,4),
+	rt_drygood_supshop_cost Decimal(18,4),
+	rt_drygood_supshop_qty Decimal(18,4),
+	rt_drygood_supshop_boxes Decimal(18,4),
+	rt_drygood_supshop_shops String,
+	rt_drygood_smallshop_cost Decimal(18,4),
+	rt_drygood_smallshop_qty Decimal(18,4),
+	rt_drygood_smallshop_boxes Decimal(18,4),
+	rt_drygood_smallshop_shops String,
+	rt_drygood_dc_cost Decimal(18,4),
+	rt_drygood_dc_qty Decimal(18,4),
+	rt_drygood_dc_boxes Decimal(18,4),
+	rt_drygood_dc_shops String,
+	rt_fresh_supshop_cost Decimal(18,4),
+	rt_fresh_supshop_qty Decimal(18,4),
+	rt_fresh_supshop_shops String,
+	rt_fresh_smallshop_cost Decimal(18,4),
+	rt_fresh_smallshop_qty Decimal(18,4),
+	rt_fresh_smallshop_shops String,
+	rt_fresh_dc_cost Decimal(18,4),
+	rt_fresh_dc_qty Decimal(18,4)
+)
+engine = MergeTree PARTITION BY toYYYYMM(stat_day) ORDER BY (stat_day, out_shop_id) SETTINGS index_granularity = 8192
+;
+
+DROP TABLE dw_hr.vw_fct_rt_dc_shop_day;
+
+
+CREATE VIEW dw_hr.vw_fct_rt_dc_shop_day 
+as
+  SELECT frt.stat_year,
+         frt.stat_month,
+         frt.stat_day,
+         frt.out_buid,
+         dictGetString('dw_buinfo', 'buname', tuple(out_buid))                                       AS out_buname,
+         frt.out_shop_id,
+         dictGetString('dw_shop', 'shopname', tuple(out_shop_id))                                    AS out_shopname,
+         dictGetString('dw_shop', 'provinces_regions', tuple(out_shop_id))                           AS out_provinces_regions,
+         multiIf(frt.dctype = 1, '干货', frt.dctype = 2, '生鲜', '未知')                                   AS rt_dctype,
+         multiIf(frt.buntype = 1, '配送', frt.buntype = 3, '返配', frt.buntype = 5, '调拨', frt.buntype = 6, '批发',
+                 frt.buntype = 7, '提货', '未知')                                                        AS rt_buntype,
+         frt.in_shop_id,
+         dictGetString('dw_shop', 'shopname', tuple(in_shop_id))                                     AS in_shopname,
+         dictGetString('dw_shop', 'provinces_regions', tuple(in_shop_id))                            AS in_provinces_regions,
+         multiIf(frt.shopformid = 1, '大超', frt.shopformid = 2, '小业态', frt.shopformid = 3, '标超', frt.shopformid = 4,
+                 '便利店', frt.shopformid = 5, '仓间', '未知')                                              AS shopformid_type,
+         multiIf(frt.datasource = 1, '全国', frt.datasource = 2, '香港', frt.datasource = 3, '苏果', frt.datasource = 4,
+                 'OLE', '未知')                                                                        AS rt_datasource,
+         logistics,
+         frt.rt_qty,
+         frt.rt_cost,
+         frt.rt_taxcost,
+         frt.rt_shops,
+         rt_drygood_qty,
+         rt_drygood_cost,
+         rt_drygood_boxes,
+         rt_drygood_shops,
+         rt_fresh_qty,
+         rt_fresh_cost,
+         rt_fresh_shops,
+         rt_supshop_cost,
+         rt_supshop_qty,
+         rt_supshop_shops,
+         rt_smallshop_cost,
+         rt_smallshop_qty,
+         rt_smallshop_shops,
+         rt_dc_cost,
+         rt_dc_qty,
+         rt_drygood_supshop_cost,
+         rt_drygood_supshop_qty,
+         rt_drygood_supshop_boxes,
+         rt_drygood_supshop_shops,
+         rt_drygood_smallshop_cost,
+         rt_drygood_smallshop_qty,
+         rt_drygood_smallshop_boxes,
+         rt_drygood_smallshop_shops,
+         rt_drygood_dc_cost,
+         rt_drygood_dc_qty,
+         rt_drygood_dc_boxes,
+         rt_drygood_dc_shops,
+         rt_fresh_supshop_cost,
+         rt_fresh_supshop_qty,
+         rt_fresh_supshop_shops,
+         rt_fresh_smallshop_cost,
+         rt_fresh_smallshop_qty,
+         rt_fresh_smallshop_shops,
+         rt_fresh_dc_cost,
+         rt_fresh_dc_qty
+  FROM dw_hr.fct_rt_dc_shop_day AS frt
+;
+
 
 --------------------------------------- 事实表 - 配送日清单表 ---------------------------------------
 
@@ -394,6 +520,8 @@ CREATE VIEW dw_hr.vw_fct_rt_dc_shop_sku_vender_day (stat_year UInt16, stat_month
     
 
 --------------------------------------- 事实表 - 配送月清单表 ---------------------------------------
+DROP TABLE dw_hr.fct_rt_dc_shop_sku_vender_mon;
+
 CREATE TABLE dw_hr.fct_rt_dc_shop_sku_vender_mon (
   stat_year                  UInt16,
   stat_month                 UInt32,
@@ -403,7 +531,8 @@ CREATE TABLE dw_hr.fct_rt_dc_shop_sku_vender_mon (
   datasource                 UInt8,
   venderid                   String,
   categorytreeid             UInt8,
-  categoryid                 UInt32,
+  categoryid                 String,
+  logistics                  UInt8,
   buntype                    UInt8,
   dctype                     UInt8,
   shopformid                 UInt8,
