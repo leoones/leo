@@ -125,10 +125,11 @@ select
         sum(deliver_taxamount) as rt_cost,
         sum(cost*deliver_scatter_num) as rt_taxcost
     from ods_hr.sg_deliver_t xdt
-    all inner join ods_hr.sg_shop ss on xdt.in_shop_id = ss.shopid
+    all inner join ods_hr.sg_shop ss on xdt.out_shop_id = ss.shopid
     where xdt.deliver_date >= toDate('$stat_day')
     and xdt.deliver_date  < addDays(toDate('$stat_day'), 1)
     and xdt.logistics in ('0存储', '1直流', '3调整')
+    and xdt.goods_code not in ('888886', '888887', '888894', '999258258')
     group by stat_year,stat_month, 
              stat_day, venderid,
              out_shop_id, dctype, 
