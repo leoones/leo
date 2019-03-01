@@ -360,7 +360,9 @@ CREATE TABLE ods_hr.ration_l (
     PARTITION BY toYYYYMM(deliver_date) ORDER BY out_shop_id
     SETTINGS index_granularity = 8192;
   
----------------------------------------- 全国  门店 直送 信息 ----------------------------------    
+---------------------------------------- 全国  门店 直送 信息 ----------------------------------  
+DROP TABLE ods_hr.receipt_store_l;
+
 CREATE TABLE ods_hr.receipt_store_l (
   check_date        Date,
   sheetid           String,
@@ -370,7 +372,7 @@ CREATE TABLE ods_hr.receipt_store_l (
   check_box_num     Decimal (18, 4),
   check_scatter_num Decimal (18, 4),
   cost              Decimal (18, 4),
-  categoryid        UInt32,
+  categoryid        String,
   goodsid           UInt32,
   venderid          String,
   refsheetid        String,
