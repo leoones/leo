@@ -1,4 +1,4 @@
-alter table dw_hr.fct_rsl_dc_shop_vender_day drop partition(toYYYYMM(toDate('{0}')))$$
+alter table dw_hr.fct_rsl_dc_shop_vender_day drop partition(toYYYYMM(toDate('{0}')));
 
 insert into dw_hr.fct_rsl_dc_shop_vender_day
 select toYear(check_date) as stat_year,
@@ -74,4 +74,4 @@ group by stat_year,
 			   rsl.categoryid,
 			   rsl.venderid,
          dc_type,
-         shopformid$$
+         shopformid;
