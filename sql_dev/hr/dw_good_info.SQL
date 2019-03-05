@@ -22,7 +22,7 @@ insert into dw_hr.dw_good_info(
 	h_categoryid ,
 	h_categoryname 
     )
-select jdi.buid,
+select toUInt8OrZero(jdi.buid),
             jdi.categoryid as categoryid_new,
             toUInt8(dictGet('dw_buinfo', 'categorytreeid', tuple(buid))) as categorytreeid_new,
             jdi.sysgoodsid,
@@ -31,7 +31,7 @@ select jdi.buid,
             jdi.goodsname,
             jdi.barcode,
             jdi.unitname,
-            jdi.inbuid,
+            toUInt8OrZero(jdi.inbuid),
             jdi.producingarea,
             jdi.adviceprice,
             jdi.advicecost,
