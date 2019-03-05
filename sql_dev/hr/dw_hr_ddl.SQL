@@ -1,11 +1,13 @@
 --------------------------------------- 维度表 - 供应商 ---------------------------------------
+drop table dw_hr.dw_vender_info;
+
 CREATE TABLE dw_hr.dw_vender_info (
-  buid              String,
-  venderid          String,
+  buid              UInt8,
+  venderid          UInt64,
   vendername        String,
   vendercode        String,
-  parent_buid       String,
-  parent_venderid   String,
+  parent_buid       UInt8,
+  parent_venderid   UInt64,
   parent_vendername String
 ) ENGINE = Log;
   
@@ -23,9 +25,10 @@ CREATE VIEW dw_hr.vw_dw_buinfo (buid String, buname String, mapping_buid String,
 drop table if exists dw_hr.dw_category_info;
 
 
-CREATE TABLE dw_hr.dw_category_info (
+create table dw_hr.dw_category_info
+(
   categorytreeid   UInt8,
-  deptlevelid      UInt32,
+  deptlevelid      UInt8,
   categoryid       String,
   categoryname     String,
   mid_categoryid   String,
@@ -33,7 +36,9 @@ CREATE TABLE dw_hr.dw_category_info (
   h_categoryid     String,
   h_categoryname   String
 )
-  ENGINE = Log;
+  engine = Log;
+
+
   
   
 --------------------------------------- 维度表 - 商品 ---------------------------------------
@@ -41,51 +46,56 @@ drop table dw_hr.dw_good_info;
 
 create table dw_hr.dw_good_info
 (
-	buid String,
-	categoryid String,
-	categorytreeid UInt8,
-	sysgoodsid UInt8,
-	goodsid UInt32,
-	goodscode UInt32,
-	goodsname String,
-	barcode String,
-	unitname String,
-	inbuid String,
-	producingarea String,
-	adviceprice String,
-	advicecost String,
-	addrate String,
-	brandid UInt32,
-	categoryname String,
-	mid_categoryid String,
-	mid_categoryname String,
-	h_categoryid String,
-	h_categoryname String
+  buid             UInt8,
+  categoryid       String,
+  categorytreeid   UInt8,
+  sysgoodsid       UInt8,
+  goodsid          UInt32,
+  goodscode        UInt32,
+  goodsname        String,
+  barcode          String,
+  unitname         String,
+  inbuid           String,
+  producingarea    String,
+  adviceprice      String,
+  advicecost       String,
+  addrate          String,
+  brandid          UInt32,
+  categoryname     String,
+  mid_categoryid   String,
+  mid_categoryname String,
+  h_categoryid     String,
+  h_categoryname   String
 )
-engine = Log;
+  engine = Log;
+
 
 
   
   
 --------------------------------------- 维度表 - 店铺信息 ---------------------------------------
+drop table dw_hr.dw_shop_info;
 
-CREATE TABLE dw_hr.dw_shop_info (
+create table dw_hr.dw_shop_info
+(
   shopid            String,
   shopcode          String,
   shopname          String,
-  buid              String,
-  inbuid            String,
-  shopformid        UInt16,
-  shopstatus        UInt16,
+  buid              UInt8,
+  inbuid            UInt8,
+  shopformid        UInt8,
+  shopstatus        UInt8,
   buname            String,
-  categorytreeid    UInt32,
+  categorytreeid    UInt8,
   payshopid         String,
   regionid          UInt16,
   provinces_regions String,
   propertype        String,
   dctype            String
 )
-  ENGINE = Log;
+  engine = Log;
+
+
 
 
 --------------------------------------- 事实表 --> 验收主题 ---------------------------------------
