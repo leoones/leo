@@ -1,0 +1,53 @@
+
+
+-------------------------------------- 数据迁移 --------------------------------------------
+1. 创建一个新的空数据库
+
+   create database test_new;
+
+2. 登录服务器删除
+
+   rm -rf /data/clickhouse/data/data/test_new/
+   
+   
+3. 建立软链接
+
+   ln -s /ods_data/ test_new
+   chown -R clickhouse:clickhouse /ods_data
+   
+4.服务器上 文件直接迁移
+
+  cp -r /data/clickhouse/data/data/dw_hr/fct_rt_dc_shop_day /data/clickhouse/data/data/test_new
+
+  
+5. 登录新建的数据库test_new 并执行以下脚本
+
+  /data/clickhouse/data/metadata/dw_hr/fct_rt_dc_shop_day.sql
+  
+  
+
+--------------------------------------- 多磁盘存储 ---------------------------------------------
+1. 创建一个新的空数据库
+   create database ods_midea;
+   
+2. 登录服务器删除
+   rm -rf /data/clickhouse/data/data/ods_midea
+   
+3. 建立软链接
+
+   ln -s /sdb/midea/ ods_midea
+ 
+   chown -R clickhouse:clickhouse /sdb/midea/
+
+
+
+4. 测试
+
+    create table t(
+				  id UInt8,
+				  name String
+				) engine =Log;
+				
+				
+				insert into t(id, name)
+				values (1 , 'b');
