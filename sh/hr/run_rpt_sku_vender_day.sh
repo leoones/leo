@@ -31,22 +31,22 @@ sql="
         select  toYear(rpt.check_date) as stat_year,
                 toYYYYMM(rpt.check_date)  as stat_month,
                 rpt.check_date as stat_day,
-                dictGetString('dw_shop', 'buid', tuple(dc)) as rpt_buid,
+                dictGetUInt8('dw_shop', 'buid', tuple(dc)) as rpt_buid,
                 dc as dc_shop_id,
                 case when dictGetString('dw_shop', 'dctype', tuple(dc_shop_id)) = '' then 1
                     else 2 end dctype,
                 rpt.shopid,
-                case when ( dictGetUInt16('dw_shop', 'shopformid', tuple(shopid)) as c) in (21, 51) then 2
+                case when ( dictGetUInt8('dw_shop', 'shopformid', tuple(shopid)) as c) in (21, 51) then 2
                     when  c in (1, 6, 11) then  1
                     when  c in (9) then 5
                     else 0 end shopformid,
-                dictGetUInt8('dw_buinfo', 'categorytreeid', tuple(rpt_buid))  AS categorytreeid,
+               dictGetUInt8('dw_buinfo', 'categorytreeid', tuple(rpt_buid))  AS categorytreeid,
                 rpt.categoryid,
                 rpt.logistics,
                 rpt.venderid,
-                case when rpt_buid = '19' then 4 else 1 end datasource,
+                case when rpt_buid = 19 then 4 else 1 end datasource,
                 sum(rpt.check_scatter_num) as rpt_qty,
-                sum(case when rpt_buid = '19'
+                sum(case when rpt_buid = 19
                     then multiIf(( trunc(toUInt64(rpt.categoryid)/10000) as d) = 53 , rpt.check_box_num / 50,
                                     d =  81 , 0, rpt.check_box_num )
                     else multiIf( d = 12 , rpt.check_box_num / 50,
@@ -58,20 +58,31 @@ sql="
         where rpt.check_date >= toDate('$stat_mon_first')
         and rpt.check_date  < addMonths(toDate('$stat_mon_first'), 1)
        and rpt.dc <> '995045'
-        group by stat_year, stat_month, stat_day, rpt_buid, dc_shop_id, dctype,shopid,
-                shopformid, categoryid, logistics, venderid, datasource
+        group by stat_year,
+                 stat_month,
+                 stat_day,
+                 rpt_buid,
+                 dc_shop_id,
+                 dctype,
+                 shopid,
+                 categorytreeid,
+                 shopformid,
+                 categoryid,
+                 logistics,
+                 venderid,
+                 datasource
 
         union all
         select toYear(xct.check_date) as stat_year,
             toYYYYMM(xct.check_date)  as stat_month,
             xct.check_date as stat_day,
-            '21' as buid,
+            21 as buid,
             xct.shop_id as dc_shop_id,
             multiIf((trunc(toUInt64(xct.category_id) / 10000) as c ) >=212 , 1, c < 212 , 2, 0) as dctype,
             xct.shop_id as shop_id,
             2 as shopformid,
-            21 AS categorytreeid, 
-            category_id, 
+            21 AS categorytreeid,
+            category_id,
             multiIf(xct.logistics = 'G', 1, xct.logistics IN ('T', 'F'), 2, 0) as logistics_id,
             '' as venderid,
             2 as datasource,
@@ -89,7 +100,7 @@ sql="
         select toYear(sct.check_date) as stat_year,
             toYYYYMM(sct.check_date)  as stat_month,
             sct.check_date as stat_day,
-            '17' as buid,
+            17 as buid,
             sct.shop_id as dc_shop_id,
             multiIf(sct.shop_id in ('9001', '9005', '9006') ,1, sct.shop_id='0000', 2, 0) as dctype,
             sct.shop_id as shop_id,
@@ -97,7 +108,7 @@ sql="
                     when c >=21 and c <=60 then 2
                     when c in (92, 93, 97, 98)  then 1
                 else  0 end shopformid,
-            17 AS categorytreeid, 
+            17 AS categorytreeid,
             category_id,
             multiIf(sct.logistics in ('3', '0'), 1, sct.logistics in ('1'), 2, 0) as logistics_id,
             sct.venderid,
