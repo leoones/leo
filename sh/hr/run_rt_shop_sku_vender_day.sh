@@ -31,12 +31,12 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		        toYear(rl.deliver_date) as stat_year,
 		        toYYYYMM(rl.deliver_date) as stat_month,
 		        rl.deliver_date as stat_day,
-		        dictGetString('dw_shop', 'buid', tuple(out_shop_id)) as out_buid,
+		        dictGetUInt8('dw_shop', 'buid', tuple(out_shop_id)) as out_buid,
 		        rl.out_shop_id,
 		        case when dictGetString('dw_shop', 'dctype', tuple(out_shop_id)) = '干货' then 1
 		                else 2 end dctype,
 		        rl.in_shop_id,
-		        case when ( dictGetUInt16('dw_shop', 'shopformid', tuple(in_shop_id)) as c) in (21, 51) then 2
+		        case when ( dictGetUInt8('dw_shop', 'shopformid', tuple(in_shop_id)) as c) in (21, 51) then 2
 		                when  c in (1, 6, 11) then  1
 		                when  c in (9) then 5
 		                else 0 end shopformid,
@@ -49,8 +49,8 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		                when rl.type = 3 then 5
 		                when rl.type = 4 then 7
 		            end buntype,
-		        case when out_buid = '19' then 4 else 1 end datasource,
-		        sum(case when out_buid = '19'
+		        case when out_buid = 19 then 4 else 1 end datasource,
+		        sum(case when out_buid = 19
 		                    then multiIf(( trunc(rl.categoryid / 10000)  as d ) = 53 , qty / (multiIf(rl.packing_qty<=0, 1, rl.packing_qty) as pcks )/50,
 		                                d not in (53, 81), qty/pcks, 0
 		                                )
@@ -61,7 +61,7 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		        sum(rl.costvalue) as rt_taxcost
 		    from ods_hr.ration_l rl
 		    where rl.deliver_date >= toDate('$stat_mon_first')
-		    and rl.deliver_date <  addMonths(toDate('$stat_mon_first'), 1)
+		      and rl.deliver_date <  addMonths(toDate('$stat_mon_first'), 1)
 		    group by stat_year,
 		            stat_month,
 		            stat_day,
@@ -80,7 +80,7 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		    select  toYear(xdt.deliver_date) as stat_year,
 		        toYYYYMM(xdt.deliver_date) as stat_month,
 		        xdt.deliver_date as stat_day,
-		        '21' as out_buid,
+		        21 as out_buid,
 		        xdt.out_shop_id,
 		        case when trunc(toUInt32(xdt.category_id) / 10000)>=212 then 1
 		            else 2 end dctype,
@@ -95,7 +95,7 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		        1 as buntype,
 		        2 as datasource,
 		        sum(multiIf(trunc(toUInt32(xdt.category_id) / 10000) > 212 , deliver_box_num,
-		                trunc(toUInt32(xdt.category_id) / 10000) =212,  deliver_box_num / 50, 0)) as rt_boxes,
+		                trunc(toUInt32(xdt.category_id) / 10000) =212,   deliver_box_num  / 50, 0)) as rt_boxes,
 		        sum(deliver_scatter_num) as rt_qty,
 		        sum(cost * deliver_scatter_num) as rt_cost,
 		        0 as rt_taxcost
@@ -110,7 +110,7 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		    select  toYear(xdt.deliver_date) as stat_year,
 		        toYYYYMM(xdt.deliver_date) as stat_month,
 		        xdt.deliver_date as stat_day,
-		        '17' as out_buid,
+		        17 as out_buid,
 		        xdt.out_shop_id,
 		        case when out_shop_id in ('9001', '9005', '9006') then 1
 		                when out_shop_id in ('0000') then 2
@@ -271,4 +271,5 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		            shopformid;"
   clickhouse-client -h 192.168.89.102 --user=default --password=sMNl+f/n -m -n --query="$sql"
   echo "------------------------- $stat_mon_first Complete---------------------------"
+  startDate=$(date -d "$startDate+1months" +%Y%m%d)
 done
