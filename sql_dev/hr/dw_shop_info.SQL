@@ -1,3 +1,4 @@
+truncate table dw_hr.dw_shop_info
 insert into dw_hr.dw_shop_info
 (
  shopid,
@@ -16,22 +17,22 @@ insert into dw_hr.dw_shop_info
  dctype
 )
 
-select 
+select
  tmp1.shopid,
  tmp1.shopcode,
  tmp1.shopname,
- tmp1.buid,
- tmp1.inbuid,
- tmp1.shopformid,
+ toUInt8OrZero(tmp1.buid) as buid_new,
+ toUInt8OrZero(tmp1.inbuid) as inbuid_new,
+ toUInt8(tmp1.shopformid) as shopformid_new,
  tmp1.shopstatus,
  jb.buname,
- jb.categorytreeid,
+ toUInt8(jb.categorytreeid) as categorytreeid_new,
  tmp1.payshopid,
  tmp1.regionid,
  tmp1.provinces_regions,
  tmp1.propertype,
  tmp1.dctype
- from 
+ from
 	(select  js.shopid,
 	 js.shopcode,
 	 js.shopname,
@@ -46,4 +47,4 @@ select
 	 jd.dctype
 	  from ods_hr.jv_shop js
 	left  join ods_hr.jt_dcinfo jd on js.shopid = jd.shopid) tmp1
-left join ods_hr.jv_buinfo jb on tmp1.buid = jb.buid
+left join ods_hr.jv_buinfo jb on tmp1.buid = jb.buid;
