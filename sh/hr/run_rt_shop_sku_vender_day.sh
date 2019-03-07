@@ -40,7 +40,7 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		                when  c in (1, 6, 11) then  1
 		                when  c in (9) then 5
 		                else 0 end shopformid,
-		        rl.goodsid,
+		        toString(rl.goodsid) as goodsid_new,
 		        toString(categoryid) as categoryid_new,
 		        rl.venderid,
 		        logistics,
@@ -70,7 +70,7 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		            dctype,
 		            rl.in_shop_id,
 		            shopformid,
-		            rl.goodsid,
+		            goodsid_new,
 		            categoryid_new,
 		            rl.venderid,
 		            rl.logistics,
@@ -86,7 +86,7 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		            else 2 end dctype,
 		        xdt.in_shop_id,
 		        2 as shopformid,
-		        toUInt32(xdt.goods_code) as goodsid,
+		        xdt.goods_code as goodsid,
 		        category_id as categoryid_new,
 		        '' as venderid,
 		        case when xdt.logistics in ('F', 'T') then 1
@@ -120,7 +120,7 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		                when c >=21 and c <=60 then 2
 		                when c in (92, 93, 97, 98)  then 1
 		            else  0 end shopformid,
-		        toUInt32(xdt.goods_code) as goodsid,
+		        xdt.goods_code as goodsid,
 		        category_id as categoryid_new,
 		        venderid,
 		        case when xdt.logistics in ('1直流') then 1
@@ -157,6 +157,7 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 			venderid ,
 			categorytreeid ,
 			categoryid ,
+			goodsid,
 			logistics ,
 			buntype ,
 			dctype ,
@@ -211,6 +212,7 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		        venderid,
 		        multiIf(datasource=2, 21, datasource=3, 17, dictGetUInt8('dw_buinfo', 'categorytreeid', tuple(out_buid))  ) as new_categorytreeid,
 		        frdssvd.category_id ,
+		        goodsid,
 		        logistics,
 		        buntype,
 		        dctype,
@@ -264,6 +266,7 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		            datasource,
 		            venderid,
 		            new_categorytreeid,
+		            goodsid,
 		            category_id,
 		            logistics,
 		            buntype,
