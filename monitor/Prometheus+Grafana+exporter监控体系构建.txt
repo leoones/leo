@@ -1,0 +1,35 @@
+参考: https://blog.csdn.net/joy0921/article/details/80129164
+     https://www.jianshu.com/p/4f3c6bbbbfa9
+     https://blog.csdn.net/hfut_wowo/article/details/78536022
+     https://prometheus.io/download/
+     https://blog.csdn.net/wuxiaobingandbob/article/details/78954406
+     https://www.jianshu.com/p/8d2c020313f0
+    
+
+
+----------------------------------  prometheus 时序数据安装  -----------------------------------
+
+
+ 1) 
+
+
+
+--------------------------------- node_exporter 操作系统监控指标采集器 ---------------------------------
+
+
+
+
+--------------------------------- mysqld_exporter mysql监控指标采集器 ---------------------------------
+
+
+
+----------------------------------  grafana 时序数据安装  -----------------------------------
+
+
+
+
+
+   1) 增加dashboard模版存放路径 vim /etc/grafana/grafana.ini
+      [dashboards.json]
+			enabled = true
+			path = /var/lib/grafana/dashboards
