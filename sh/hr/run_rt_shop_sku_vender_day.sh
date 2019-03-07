@@ -210,7 +210,7 @@ stat_mon=$(date -d "$startDate+0days" +%Y%m)
 		        frdssvd.in_shop_id,
 		        datasource,
 		        venderid,
-		        multiIf(datasource=2, 21, datasource=3, 17, dictGetUInt8('dw_buinfo', 'categorytreeid', tuple(out_buid))  ) as new_categorytreeid,
+		        multiIf(datasource=2, 21, datasource=3, 17, dictGetUInt8('dw_buinfo', 'categorytreeid', toUInt64(out_buid))  ) as new_categorytreeid,
 		        frdssvd.category_id ,
 		        goodsid,
 		        logistics,
