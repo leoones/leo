@@ -1,5 +1,4 @@
 truncate table dw_hr.dw_good_info;
-
 insert into dw_hr.dw_good_info(
    buid ,
 	categoryid ,
@@ -20,11 +19,11 @@ insert into dw_hr.dw_good_info(
 	mid_categoryid ,
 	mid_categoryname ,
 	h_categoryid ,
-	h_categoryname 
+	h_categoryname
     )
 select toUInt8OrZero(jdi.buid),
             jdi.categoryid as categoryid_new,
-            toUInt8(dictGet('dw_buinfo', 'categorytreeid', tuple(buid))) as categorytreeid_new,
+            toUInt8(dictGet('dw_buinfo', 'categorytreeid', toUInt64(buid))) as categorytreeid_new,
             jdi.sysgoodsid,
             jdi.goodsid,
             jdi.goodscode,
@@ -37,9 +36,9 @@ select toUInt8OrZero(jdi.buid),
             jdi.advicecost,
             jdi.addrate,
             jdi.brandid,
-           dictGet('dw_category_info', 'categoryname', (categorytreeid_new, categoryid_new))     AS categoryname,
-           dictGet('dw_category_info', 'mid_categoryid', (categorytreeid_new, categoryid_new))   AS mid_categoryid,
-           dictGet('dw_category_info', 'mid_categoryname', (categorytreeid_new, categoryid_new)) AS mid_categoryname,
-           dictGet('dw_category_info', 'h_categoryid', (categorytreeid_new, categoryid_new))     AS h_categoryid,
-           dictGet('dw_category_info', 'h_categoryname', (categorytreeid_new, categoryid_new))   AS h_categoryname
-      from ods_hr.jv_goods jdi
+           dictGetString('dw_category_info', 'categoryname', (categorytreeid_new, categoryid_new))     AS categoryname,
+           dictGetString('dw_category_info', 'mid_categoryid', (categorytreeid_new, categoryid_new))   AS mid_categoryid,
+           dictGetString('dw_category_info', 'mid_categoryname', (categorytreeid_new, categoryid_new)) AS mid_categoryname,
+           dictGetString('dw_category_info', 'h_categoryid', (categorytreeid_new, categoryid_new))     AS h_categoryid,
+           dictGetString('dw_category_info', 'h_categoryname', (categorytreeid_new, categoryid_new))   AS h_categoryname
+      from ods_hr.jv_goods jdi;
