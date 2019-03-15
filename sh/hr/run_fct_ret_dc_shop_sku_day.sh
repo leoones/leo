@@ -52,7 +52,7 @@ sql="
       and ret.outcheckdate  < addMonths(toDate('$stat_mon_first'), 1)
     ) dd
   all left  join dw_hr.dw_good_info dgi on dd.out_buid = dgi.buid and dd.goodsid = toUInt32(dgi.goodsid);"
-clickhouse-client -h 192.168.89.102 --user=default --password=sMNl+f/n -m -n --query="$sql"
+clickhouse-client -h 10.239.33.43 --user=default --password=ycuPocDi -m -n --query="$sql"
 echo "----------------- $stat_mon Complete---------------------"
 startDate=$(date -d "$startDate+1months" +%Y%m%d)
 done
