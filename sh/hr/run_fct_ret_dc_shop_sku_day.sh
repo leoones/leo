@@ -1,4 +1,14 @@
-insert into dw_hr.fct_ret_dc_shop_sku_day
+#!/bin/bash
+data_path='/data/'
+startDate=20160101
+endDate=20181231
+while [ $startDate -le $endDate ];
+do
+stat_mon_first=$(date -d "$startDate+0days" +%Y-%m-%d)
+stat_mon=$(date -d "$startDate+0days" +%Y%m)
+sql="
+   alter table dw_hr.fct_ret_dc_shop_sku_day drop partition($stat_mon);
+   insert into dw_hr.fct_ret_dc_shop_sku_day
     (stat_year,
      stat_mon,
      outshopid,
@@ -41,4 +51,4 @@ insert into dw_hr.fct_ret_dc_shop_sku_day
     where ret.outcheckdate >= toDate('2018-01-01')
       and ret.outcheckdate  < addMonths(toDate('2018-01-01'), 1)
     ) dd
-  all left  join dw_hr.dw_good_info dgi on dd.out_buid = dgi.buid and dd.goodsid = toUInt32(dgi.goodsid);
+  all left  join dw_hr.dw_good_info dgi on dd.out_buid = dgi.buid and dd.goodsid = toUInt32(dgi.goodsid);"
