@@ -23,7 +23,7 @@ sql="
      ret_cost,
      ret_taxcost)
   select stat_year,
-          stat_mon,
+          stat_month,
           outshopid,
           out_buid,
           inshopid,
