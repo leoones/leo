@@ -48,8 +48,8 @@ sql="
             round(ret.cost * ret.outqty, 4) as ret_cost,
             round((ret.cost  * ret.outqty)  / (1+ret.costtaxrate/100),4) as ret_taxcost
      from ods_hr.ration_ret_l ret
-    where ret.outcheckdate >= toDate('2018-01-01')
-      and ret.outcheckdate  < addMonths(toDate('2018-01-01'), 1)
+    where ret.outcheckdate >= toDate('$stat_mon_first')
+      and ret.outcheckdate  < addMonths(toDate('$stat_mon_first'), 1)
     ) dd
   all left  join dw_hr.dw_good_info dgi on dd.out_buid = dgi.buid and dd.goodsid = toUInt32(dgi.goodsid);"
 clickhouse-client -h 192.168.89.102 --user=default --password=sMNl+f/n -m -n --query="$sql"
