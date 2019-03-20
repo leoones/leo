@@ -5,6 +5,8 @@
 
 
 ----------------------------------------------- 谓词下推 导致数据库crash ----------------------------------------------------------
+set enable_optimize_predicate_expression = 1;
+
 SELECT 
     rpt_logistics, 
     buid, 
