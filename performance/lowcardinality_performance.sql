@@ -40,8 +40,9 @@ alter table ods_hr.sale_shop_sku_day modify COLUMN brandid LowCardinality(String
 -- 查看各个字段大小
 SELECT column,
         any(type) as column_type,
-        sum(column_data_compressed_bytes) compressed_size,
-        sum(column_data_uncompressed_bytes) uncompressed_size,
+        round(sum(column_data_compressed_bytes) / 1024 / 1024)  as compressed_size,
+        round(sum(column_data_uncompressed_bytes) / 1024 / 1024) as uncompressed_size,
+        round(compressed_size / (compressed_size +  uncompressed_size), 2) as uncompressed_percent,
         sum(rows) as act_rows
     FROM system.parts_columns
     WHERE (table = 'sale_shop_sku_day')
