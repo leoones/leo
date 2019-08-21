@@ -1,0 +1,5 @@
+│ distributed_aggregation_memory_efficient │ 1 │
+│ max_bytes_before_external_group_by │ 8000000000 │
+│ max_bytes_before_external_sort │ 8000000000 │
+│ max_memory_usage │ 16000000000 │
+│ max_memory_usage_for_all_queries │ 16000000000 │
