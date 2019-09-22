@@ -1,0 +1,22 @@
+select qtl.query,  -- SQL语句
+       qtl.query_start_time, --开始时间
+       qtl.query_duration_ms, --耗时
+       qtl.read_rows,         --读取行数
+       qtl.read_bytes,        --读取大小
+       qtl.written_rows,      --写入行数
+       qtl.written_bytes,     --写入大小
+       qtl.memory_usage,      --使用内存大小
+       qtl.peak_memory_usage,
+       qtl.os_thread_id,      --系统线程ID
+       qtl.master_os_thread_id,
+       qtl.user,              --登录用户
+       qtl.address,           --地址
+       qtl.client_hostname,   --客户端
+       qtl.port,              -- 端口
+       qtl.http_method,       --请求方式
+       qtl.http_user_agent,
+       qtl.`ProfileEvents.Names`,  --事件名
+       qtl.`ProfileEvents.Values`  --事件指标值
+ from system.query_thread_log qtl
+where qtl.query like '%vw_fct_sale_shop_sku_day%'
+order by qtl.query_start_time desc
