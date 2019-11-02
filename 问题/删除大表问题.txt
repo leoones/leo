@@ -1,0 +1,8 @@
+对一张大于50G的进行drop时，发生错误
+Code: 359, e.displayText() = DB::Exception: Table or Partition in dw_hr.fct_sale_shop_sku_day was not dropped.
+
+解决：
+  可以在config.xml 配置 参数
+  <max_table_size_to_drop>0</max_table_size_to_drop>
+  
+  设置为 0 时, 表示不限制.
